@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MSS Dashboard</title>
+<style>
+body { font-family: Arial; background:#111; color:white; }
+table { border-collapse: collapse; width:100%; font-size:12px; }
+th, td { border:1px solid #333; padding:6px; }
+th { background:#222; }
+.green { background:#14532d; }
+.yellow { background:#713f12; }
+.red { background:#7f1d1d; }
+</style>
+</head>
+<body>
+
+<h2>MSS Dashboard</h2>
+<input type="text" id="search" placeholder="Search..." onkeyup="filterTable()">
+<br><br>
+<table id="table"></table>
+
+<script>
+fetch("mss.csv")
+.then(res => res.text())
+.then(text => {
+  const rows = text.split("\n").map(r => r.split(","));
+  const table = document.getElementById("table");
+
+  rows.forEach((row, i) => {
+    const tr = document.createElement("tr");
+    row.forEach(cell => {
+      const el = document.createElement(i===0 ? "th":"td");
+      el.textContent = cell;
+
+      const num = parseFloat(cell);
+      if(!isNaN(num)){
+        if(num >= 99) el.className="green";
+        else if(num >= 95) el.className="yellow";
+        else el.className="red";
+      }
+
+      tr.appendChild(el);
+    });
+    table.appendChild(tr);
+  });
+});
+
+function filterTable(){
+  const val = document.getElementById("search").value.toLowerCase();
+  const rows = document.querySelectorAll("#table tr");
+
+  rows.forEach((row,i)=>{
+    if(i===0) return;
+    row.style.display = row.innerText.toLowerCase().includes(val) ? "" : "none";
+  });
+}
+</script>
+
+</body>
+</html>
