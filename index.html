@@ -283,7 +283,6 @@ function setStatus(msg, spinning=true){
 }
 
 function parseCSV(text) {
-  // proper CSV parse: quotes + commas in quotes
   const out = [];
   let row = [];
   let cur = "";
@@ -300,24 +299,37 @@ function parseCSV(text) {
     } else if ((ch === '\n' || ch === '\r') && !inQ){
       if (ch === '\r' && text[i+1] === '\n') i++;
       row.push(cur); cur="";
-      if (row.some(c => String(c).trim() !== "")) out.push(row.map(c => String(c ?? "").trim()));
+      // TRIM + bersihin ;;;;; dari cell
+      const cleaned = row.map(c => String(c ?? "").trim().replace(/^;+$|;+$|^;+/g, ""));
+      if (cleaned.some(c => c !== "")) out.push(cleaned);
       row = [];
     } else {
       cur += ch;
     }
   }
+
   row.push(cur);
-  if (row.some(c => String(c).trim() !== "")) out.push(row.map(c => String(c ?? "").trim()));
+  const cleaned = row.map(c => String(c ?? "").trim().replace(/^;+$|;+$|^;+/g, ""));
+  if (cleaned.some(c => c !== "")) out.push(cleaned);
   return out;
 }
 
 function isJunkRow(cells){
-  const joined = cells.join(" ").toLowerCase();
-  const nonEmpty = cells.filter(x => String(x).trim() !== "").length;
+  // bersihin dulu
+  const cleaned = cells.map(x => String(x ?? "").trim().replace(/^;+$|;+$|^;+/g, ""));
+  const joined = cleaned.join(" ").toLowerCase();
+  const nonEmpty = cleaned.filter(x => x !== "").length;
+
+  // baris kosong / isinya cuma ;;;;
+  if (nonEmpty === 0) return true;
+
+  // banyak row ";;;;" cuma jadi 1-2 cell kosong, buang
   if (nonEmpty < 3) return true;
+
+  // buang label pivot
   if (joined.includes("column labels")) return true;
   if (joined.includes("average of")) return true;
-  if (joined.replace(/;/g,"").trim() === "") return true;
+
   return false;
 }
 
@@ -545,3 +557,4 @@ load();
 </script>
 </body>
 </html>
+
