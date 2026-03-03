@@ -11,9 +11,13 @@
     <div class="wrap topbar-inner">
       <div>
         <div class="title">MSS Dashboard</div>
-        <div class="subtitle">CSV viewer (GitHub Pages) • warna otomatis hijau/kuning/merah</div>
+        <div class="subtitle">CSV viewer • warna otomatis • GitHub Pages</div>
       </div>
-      <div class="badge"><span class="dot"></span><span id="statusText">Ready</span></div>
+
+      <div class="statusPill" title="Status load">
+        <span class="dot" id="dot"></span>
+        <span id="statusText">Ready</span>
+      </div>
     </div>
   </header>
 
@@ -21,12 +25,20 @@
     <section class="card">
       <div class="toolbar">
         <div class="field">
-          <label>Dataset (CSV)</label>
+          <label>Dataset</label>
           <select id="dataset"></select>
         </div>
 
+        <div class="field grow">
+          <label>Search</label>
+          <div class="searchWrap">
+            <input id="q" placeholder="Cari Site ID / Site Name / angka…" />
+            <button class="iconBtn" id="clear" title="Clear">✕</button>
+          </div>
+        </div>
+
         <div class="field">
-          <label>Rows per page</label>
+          <label>Rows/page</label>
           <select id="rpp">
             <option>50</option>
             <option selected>100</option>
@@ -42,14 +54,19 @@
         <button class="btn primary" id="reload">Refresh</button>
       </div>
 
-      <div class="info">
-        <div id="meta">—</div>
+      <div class="metaRow">
+        <div class="chips">
+          <span class="chip">Rows: <b id="rowsCount">0</b></span>
+          <span class="chip">Filtered: <b id="filteredCount">0</b></span>
+          <span class="chip">Page: <b id="pageInfo">1/1</b></span>
+          <span class="chip">File: <code id="activeFile">-</code></span>
+        </div>
+
         <div class="legend">
-          <span class="pill"><b>Legend</b></span>
-          <span class="pill g">Hijau ≥ 99</span>
-          <span class="pill y">Kuning 95–98.99</span>
-          <span class="pill r">Merah &lt; 95</span>
-          <span class="pill"><code>1=Hijau</code> <code>0=Merah</code></span>
+          <span class="legendItem g">Hijau ≥ 99</span>
+          <span class="legendItem y">Kuning 95–98.99</span>
+          <span class="legendItem r">Merah &lt; 95</span>
+          <span class="legendItem">1=Hijau • 0=Merah</span>
         </div>
       </div>
 
@@ -58,7 +75,7 @@
       </div>
 
       <div class="footer">
-        File aktif: <code id="activeFile">-</code>
+        Tips: tekan <kbd>/</kbd> untuk fokus ke search, <kbd>Esc</kbd> untuk clear.
       </div>
     </section>
   </main>
