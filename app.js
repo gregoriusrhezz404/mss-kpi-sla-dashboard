@@ -33,11 +33,29 @@ function guessDelimiter(text){
 
 function cleanCell(v){
   let s = String(v ?? "").trim();
-  // buang deretan ;;;; atau :;;;; atau kombinasi pinggir
-  s = s.replace(/^[:;,\s]+/, "").replace(/[:;,\s]+$/, "");
-  // kalau masih berisi ;;;;; doang -> kosong
+  // buang hanya di PINGGIR, jangan sentuh delimiter di tengah
+  s = s.replace(/^[\s:;,\t]+/, "").replace(/[\s:;,\t]+$/, "");
+  // kalau isinya cuma ;;;;; atau :;;; -> kosong
   if (/^[:;]+$/.test(s)) return "";
   return s;
+}
+
+function toNum(v){
+  if (v == null) return null;
+  let s = String(v).trim();
+  if (!s) return null;
+
+  // kalau masih ada ';' di tengah, biasanya itu gabungan 2 kolom -> BUKAN angka
+  if (s.includes(";")) return null;
+
+  s = s.replace("%","");
+
+  // format Indonesia: 98,75 => 98.75
+  // format ribuan: 1.234,56 => 1234.56
+  s = s.replace(/\./g,"").replace(",","."); 
+
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
 }
 
 function parseCSV(text){
@@ -259,3 +277,4 @@ setupDropdown();
 wire();
 rpp = Number(el("rpp").value);
 load();
+
