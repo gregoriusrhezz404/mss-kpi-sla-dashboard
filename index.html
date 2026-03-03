@@ -7,80 +7,61 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <div class="title">MSS Dashboard</div>
+        <div class="subtitle">CSV viewer (GitHub Pages) • warna otomatis hijau/kuning/merah</div>
+      </div>
+      <div class="badge"><span class="dot"></span><span id="statusText">Ready</span></div>
+    </div>
+  </header>
 
-  <div class="topbar">
-    <div class="container">
-      <div class="titleRow">
-        <div>
-          <h1>MSS Dashboard</h1>
-          <div class="sub">Viewer CSV untuk monitoring (warna otomatis) • GitHub Pages / Cloudflare Pages</div>
+  <main class="wrap">
+    <section class="card">
+      <div class="toolbar">
+        <div class="field">
+          <label>Dataset (CSV)</label>
+          <select id="dataset"></select>
         </div>
-        <div class="badge">
-          <span class="dot"></span>
-          <span id="buildInfo">Ready</span>
+
+        <div class="field">
+          <label>Rows per page</label>
+          <select id="rpp">
+            <option>50</option>
+            <option selected>100</option>
+            <option>200</option>
+            <option>500</option>
+          </select>
+        </div>
+
+        <div class="spacer"></div>
+
+        <button class="btn" id="prev">← Prev</button>
+        <button class="btn" id="next">Next →</button>
+        <button class="btn primary" id="reload">Refresh</button>
+      </div>
+
+      <div class="info">
+        <div id="meta">—</div>
+        <div class="legend">
+          <span class="pill"><b>Legend</b></span>
+          <span class="pill g">Hijau ≥ 99</span>
+          <span class="pill y">Kuning 95–98.99</span>
+          <span class="pill r">Merah &lt; 95</span>
+          <span class="pill"><code>1=Hijau</code> <code>0=Merah</code></span>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="container">
-    <div class="grid">
-      <div class="card">
-        <div class="toolbar">
-          <div class="field" style="min-width:260px">
-            <label>Dataset (CSV)</label>
-            <select id="dataset"></select>
-          </div>
-
-          <div class="field" style="min-width:260px">
-            <label>Search (Site ID / Site Name / angka)</label>
-            <input id="q" placeholder="mis: ACE00007 / MUKTI / 99" />
-          </div>
-
-          <div class="field" style="min-width:160px">
-            <label>Rows per page</label>
-            <select id="rpp">
-              <option>50</option>
-              <option selected>100</option>
-              <option>200</option>
-              <option>500</option>
-            </select>
-          </div>
-
-          <div class="right">
-            <button class="btn" id="prev">← Prev</button>
-            <button class="btn" id="next">Next →</button>
-            <button class="btn primary" id="reload">Refresh</button>
-          </div>
-        </div>
-
-        <div class="status" id="status">
-          <div class="spinner"></div>
-          <div>Loading CSV…</div>
-        </div>
-
-        <div class="tableWrap">
-          <table id="tbl"></table>
-        </div>
-
-        <div class="footer">
-          <div id="meta">—</div>
-          <div class="pill">
-            <span>Legend</span>
-            <span class="k">Hijau ≥ 99</span>
-            <span class="k">Kuning 95–98.99</span>
-            <span class="k">Merah &lt; 95</span>
-            <span class="k">(1=Hijau, 0=Merah)</span>
-          </div>
-        </div>
-
-        <div class="hint">
-          <div>Tips: kalau CSV pivot masih ada “Column Labels / Average of…”, lebih bagus dibersihkan (Paste Values) dulu.</div>
-          <div>File aktif: <code id="activeFile">-</code></div>
-        </div>
+      <div class="tableWrap">
+        <table id="tbl"></table>
       </div>
-    </div>
-  </div>
+
+      <div class="footer">
+        File aktif: <code id="activeFile">-</code>
+      </div>
+    </section>
+  </main>
 
   <script src="./app.js"></script>
 </body>
